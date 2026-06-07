@@ -1,0 +1,62 @@
+﻿@model TransporteAereo.Models.Aeroporto
+
+@{
+    ViewData["Title"] = $"Editar - {Model.NomeAeroporto}";
+    Layout = "_Layout";
+}
+
+<section class="min-h-screen py-20 bg-black text-white">
+    <div class="max-w-xl mx-auto px-6 sm:px-10 lg:px-12">
+
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-white border-b border-gray-800 pb-4">
+            Editar <span class="text-blue-400">Aeroporto</span>
+        </h1>
+
+        <div class="bg-gray-900/50 rounded-xl border border-gray-800 shadow-2xl shadow-blue-500/10 p-8">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-red-400 mb-4"></div>
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-4">
+                    <label asp-for="NomeAeroporto" class="block text-sm font-medium text-gray-400"></label>
+                    <input asp-for="NomeAeroporto" class="mt-1 block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="NomeAeroporto" class="text-red-400 text-sm mt-1 block"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="CidadeAeroporto" class="block text-sm font-medium text-gray-400"></label>
+                    <input asp-for="CidadeAeroporto" class="mt-1 block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="CidadeAeroporto" class="text-red-400 text-sm mt-1 block"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="EstadoAeroporto" class="block text-sm font-medium text-gray-400"></label>
+                    <input asp-for="EstadoAeroporto" class="mt-1 block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="EstadoAeroporto" class="text-red-400 text-sm mt-1 block"></span>
+                </div>
+
+                <div class="mb-6">
+                    <label asp-for="Pais" class="block text-sm font-medium text-gray-400"></label>
+                    <input asp-for="Pais" class="mt-1 block w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="Pais" class="text-red-400 text-sm mt-1 block"></span>
+                </div>
+
+                <div class="flex justify-start space-x-4">
+                    <button type="submit" class="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold text-base uppercase tracking-wider shadow-md transition duration-300">
+                        <i class="fas fa-save mr-2"></i> Salvar
+                    </button>
+                    <a asp-action="Index" class="inline-flex items-center justify-center bg-gray-600 hover:bg-gray-500 active:bg-gray-700 text-white px-6 py-3 rounded-lg font-bold text-base uppercase tracking-wider shadow-md transition duration-300">
+                        <i class="fas fa-arrow-left mr-2"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

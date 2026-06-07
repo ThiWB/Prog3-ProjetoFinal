@@ -1,0 +1,234 @@
+﻿@model TransporteAereo.ViewModels.Admin.VooCompletoCreateViewModel
+
+@{
+    ViewData["Title"] = "Novo Voo | Transportes dos Guri";
+    Layout = "_Layout";
+}
+
+<section class="min-h-screen py-20 bg-black text-white">
+    <div class="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12">
+
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-white">
+            Planejar Novo <span class="text-blue-400">Voo</span>
+        </h1>
+        <p class="text-lg text-gray-400 mb-10 border-b border-gray-800 pb-4">
+            Defina a rota, a aeronave e as escalas para o novo itinerário.
+        </p>
+
+        <div class="flex justify-center">
+            <div class="w-full p-4">
+
+                <div class="bg-gray-900/70 p-8 rounded-xl border border-gray-800 shadow-xl shadow-blue-500/10">
+
+                    <h4 class="text-2xl font-bold text-white mb-6">Detalhes do Voo</h4>
+
+                    <form asp-action="Create" class="space-y-8" id="vooForm">
+                        <div asp-validation-summary="ModelOnly" class="p-4 bg-red-900/30 border border-red-700 text-red-300 rounded-md"></div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                            <div class="form-group">
+                                <label asp-for="IdAeronave" class="block text-sm font-medium text-gray-300 mb-2"></label>
+                                <select asp-for="IdAeronave" asp-items="Model.AeronavesDisponiveis" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300">
+                                    <option value="">-- Selecione a Aeronave --</option>
+                                </select>
+                                <span asp-validation-for="IdAeronave" class="text-sm text-red-400 mt-1 block"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="PrecoBase" class="block text-sm font-medium text-gray-300 mb-2"></label>
+                                <input asp-for="PrecoBase" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300" />
+                                <span asp-validation-for="PrecoBase" class="text-sm text-red-400 mt-1 block"></span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                            <div class="form-group">
+                                <label asp-for="IdOrigem" class="block text-sm font-medium text-gray-300 mb-2"></label>
+                                <select asp-for="IdOrigem" asp-items="Model.AeroportosDisponiveis" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300">
+                                    <option value="">-- Selecione a Origem --</option>
+                                </select>
+                                <span asp-validation-for="IdOrigem" class="text-sm text-red-400 mt-1 block"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="IdDestino" class="block text-sm font-medium text-gray-300 mb-2"></label>
+                                <select asp-for="IdDestino" asp-items="Model.AeroportosDisponiveis" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300">
+                                    <option value="">-- Selecione o Destino --</option>
+                                </select>
+                                <span asp-validation-for="IdDestino" class="text-sm text-red-400 mt-1 block"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="HorarioSaida" class="block text-sm font-medium text-gray-300 mb-2"></label>
+                                <input asp-for="HorarioSaida" type="datetime-local" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300" />
+                                <span asp-validation-for="HorarioSaida" class="text-sm text-red-400 mt-1 block"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="HorarioChegada" class="block text-sm font-medium text-gray-300 mb-2"></label>
+                                <input asp-for="HorarioChegada" type="datetime-local" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300" />
+                                <span asp-validation-for="HorarioChegada" class="text-sm text-red-400 mt-1 block"></span>
+                            </div>
+                        </div>
+
+                        <div class="pt-8">
+                            <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                                <h4 class="text-2xl font-bold text-blue-400">Escalas (Paradas)</h4>
+                                <button type="button" id="addEscalaBtn" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition duration-300">
+                                    <i class="fas fa-plus mr-1"></i> Adicionar Escala
+                                </button>
+                            </div>
+
+                            <div id="escalasContainer" class="space-y-4">
+                                @{
+                                    for (int i = 0; i < Model.Escalas.Count; i++)
+                                    {
+                                        <partial name="_EscalaFormGroupPartial" model="Model.Escalas[i]" view-data='new ViewDataDictionary(ViewData) { { "index", i }, { "AeroportosDisponiveis", Model.AeroportosDisponiveis } }' />
+                                    }
+                                }
+                            </div>
+                            <p class="text-sm text-gray-400 mt-4">
+                                *As escalas serão ignoradas se o voo for direto.
+                            </p>
+                        </div>
+
+                        <div class="form-group pt-6 flex gap-4">
+                            <input type="submit" value="Salvar Voo e Escalas"
+                                   class="inline-flex items-center justify-center
+                                                         bg-blue-600 hover:bg-blue-500 active:bg-blue-700
+                                                         text-white px-6 py-3 rounded-lg font-bold text-lg uppercase tracking-wider
+                                                         shadow-lg shadow-blue-500/30 transition duration-300 ease-in-out transform hover:scale-[1.02]
+                                                         ring-2 ring-600 ring-offset-2 ring-offset-gray-900 cursor-pointer flex-grow" />
+
+                            <a asp-action="Index" class="flex-shrink-0 self-center text-red-400 hover:text-red-300 font-semibold transition duration-300">
+                                Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 text-center">
+            <a asp-action="Index" class="text-blue-400 hover:text-blue-300 font-semibold transition duration-300">
+                <i class="fas fa-arrow-left mr-2"></i> Voltar para a Lista
+            </a>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let escalaIndex = @Model.Escalas.Count;
+            const container = document.getElementById('escalasContainer');
+            const addButton = document.getElementById('addEscalaBtn');
+
+            const aeroportoOptionsData = @Html.Raw(Json.Serialize(Model.AeroportosDisponiveis));
+            let optionsHtml = '<option value="">-- Selecione o Aeroporto --</option>';
+            aeroportoOptionsData.forEach(function(opt) {
+                optionsHtml += `<option value="${opt.value}">${opt.text}</option>`;
+            });
+
+            const escalaTemplate = `
+                <div class="escala-item bg-gray-800 p-4 rounded-lg border border-gray-700">
+                    <div class="flex justify-end mb-3">
+                        <button type="button" class="remove-escala-btn text-red-400 hover:text-red-300 font-semibold text-sm transition duration-300">
+                            Remover
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+
+                        <div class="form-group">
+                            <label for="Escalas_#INDEX___IdAeroportoEscala" class="block text-sm font-medium text-gray-400 mb-2">Aeroporto de Parada</label>
+                            <select id="Escalas_#INDEX___IdAeroportoEscala"
+                                    name="Escalas[#INDEX#].IdAeroportoEscala"
+                                    class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-3 px-4 focus:ring-blue-500">
+                                ${optionsHtml}
+                            </select>
+                            <span data-valmsg-for="Escalas[#INDEX#].IdAeroportoEscala" class="text-sm text-red-400 mt-1 block"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Escalas_#INDEX___HorarioChegada" class="block text-sm font-medium text-gray-400 mb-2">Chegada na Parada</label>
+                            <input type="datetime-local"
+                                   id="Escalas_#INDEX___HorarioChegada"
+                                   name="Escalas[#INDEX#].HorarioChegada"
+                                   class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-3 px-4 focus:ring-blue-500" />
+                            <span data-valmsg-for="Escalas[#INDEX#].HorarioChegada" class="text-sm text-red-400 mt-1 block"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Escalas_#INDEX___HorarioSaida" class="block text-sm font-medium text-gray-400 mb-2">Partida da Parada</label>
+                            <input type="datetime-local"
+                                   id="Escalas_#INDEX___HorarioSaida"
+                                   name="Escalas[#INDEX#].HorarioSaida"
+                                   class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-3 px-4 focus:ring-blue-500" />
+                            <span data-valmsg-for="Escalas[#INDEX#].HorarioSaida" class="text-sm text-red-400 mt-1 block"></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            function addEscala() {
+                const html = escalaTemplate.replace(/#INDEX#/g, escalaIndex);
+                container.insertAdjacentHTML('beforeend', html);
+                escalaIndex++;
+                rebindValidation(); 
+            }
+
+            addButton.addEventListener('click', addEscala);
+
+            container.addEventListener('click', function (e) {
+                if (e.target && e.target.matches('.remove-escala-btn')) {
+                    const item = e.target.closest('.escala-item');
+                    if (item) {
+                        item.remove();
+                        reindexEscalas(); 
+                    }
+                }
+            });
+
+            function reindexEscalas() {
+                const items = container.querySelectorAll('.escala-item');
+                escalaIndex = 0;
+                items.forEach((item) => {
+                    item.querySelectorAll('[name], [id], [data-valmsg-for]').forEach((input) => {
+
+                        let currentName = input.getAttribute('name');
+                        if (currentName) {
+                            const newName = currentName.replace(/\[\d+\]/, `[${escalaIndex}]`);
+                            input.setAttribute('name', newName);
+                        }
+
+                        let currentId = input.getAttribute('id');
+                        if (currentId) {
+                            const newId = currentId.replace(/_\d+__/, `_${escalaIndex}__`);
+                            input.setAttribute('id', newId);
+                        }
+
+                        let dataVal = input.getAttribute('data-valmsg-for');
+                        if (dataVal) {
+                            const newDataVal = dataVal.replace(/\[\d+\]/, `[${escalaIndex}]`);
+                            input.setAttribute('data-valmsg-for', newDataVal);
+                        }
+                    });
+                    escalaIndex++;
+                });
+                rebindValidation(); 
+            }
+
+            function rebindValidation() {
+                const form = document.getElementById('vooForm');
+                $(form).removeData('validator');
+                $(form).removeData('unobtrusiveValidation');
+                $.validator.unobtrusive.parse(form);
+            }
+        });
+    </script>
+}

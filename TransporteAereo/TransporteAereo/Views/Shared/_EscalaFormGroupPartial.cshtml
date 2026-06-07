@@ -1,0 +1,52 @@
+﻿@model TransporteAereo.ViewModels.Admin.EscalaInsertViewModel
+
+@{
+    int index = (int)ViewData["index"];
+    var aeroportos = ViewData["AeroportosDisponiveis"] as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>;
+    string prefixo = $"Escalas[{index}]";
+}
+
+<div class="escala-item bg-gray-800 p-4 rounded-lg border border-gray-700" data-index="@index">
+    <div class="flex justify-end mb-3">
+        <button type="button" class="remove-escala-btn text-red-400 hover:text-red-300 font-semibold text-sm transition duration-300">
+            Remover
+        </button>
+    </div>
+    <div class="grid grid-cols-3 gap-4">
+
+        <div class="form-group">
+            <label asp-for="IdAeroportoEscala" class="block text-sm font-medium text-gray-400 mb-2"></label>
+            <select asp-for="IdAeroportoEscala"
+                    name="@(prefixo).IdAeroportoEscala"
+                    id="@(prefixo)__IdAeroportoEscala"
+                    asp-items="aeroportos"
+                    class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-3 px-4 focus:ring-blue-500">
+                <option value="">-- Selecione o Aeroporto --</option>
+            </select>
+            <span asp-validation-for="IdAeroportoEscala" class="text-sm text-red-400 mt-1 block"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="HorarioChegada" class="block text-sm font-medium text-gray-400 mb-2"></label>
+            <input asp-for="HorarioChegada"
+                   type="datetime-local"
+                   name="@(prefixo).HorarioChegada"
+                   id="@(prefixo)__HorarioChegada"
+                   value="@(Model.HorarioChegada.Equals(default(DateTime)) ? "" : Model.HorarioChegada.ToString("yyyy-MM-ddTHH:mm"))"
+                   class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-3 px-4 focus:ring-blue-500" />
+            <span asp-validation-for="HorarioChegada" class="text-sm text-red-400 mt-1 block"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="HorarioSaida" class="block text-sm font-medium text-gray-400 mb-2"></label>
+            <input asp-for="HorarioSaida"
+                   type="datetime-local"
+                   name="@(prefixo).HorarioSaida"
+                   id="@(prefixo)__HorarioSaida"
+                   value="@(Model.HorarioSaida.Equals(default(DateTime)) ? "" : Model.HorarioSaida.ToString("yyyy-MM-ddTHH:mm"))"
+                   class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-3 px-4 focus:ring-blue-500" />
+            <span asp-validation-for="HorarioSaida" class="text-sm text-red-400 mt-1 block"></span>
+        </div>
+
+    </div>
+</div>

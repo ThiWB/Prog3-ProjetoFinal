@@ -1,0 +1,130 @@
+﻿@model IEnumerable<TransporteAereo.Models.Viagem>
+
+@{
+    ViewData["Title"] = "Gestão de Viagens";
+    Layout = "_Layout";
+}
+
+<section class="min-h-screen py-20 bg-black text-white">
+    <div class="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12">
+
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-white">
+            ✈️ Gestão de <span class="text-blue-400">Viagens</span>
+        </h1>
+        <p class="text-lg text-gray-400 mb-8 border-b border-gray-800 pb-4">
+            Visualize e Compre passagens para as Viagens.
+        </p>
+
+        <form asp-controller="Viagens" asp-action="Index" method="get" class="max-w-md mx-auto">
+            <div class="relative flex items-center bg-white border border-gray-300 rounded-full shadow-lg focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition duration-300 ease-in-out hover:shadow-xl">
+
+                @Html.TextBox("termoBusca", null, new
+                    {
+                        @class = "w-full py-3 pl-5 pr-12 text-gray-800 placeholder-gray-500 bg-transparent focus:outline-none text-base",
+                        @placeholder = "Buscar destino ou viagem..."
+                    })
+
+                <button type="submit" class="absolute right-0 top-0 h-full px-4 text-gray-500 hover:text-blue-600 transition duration-150 ease-in-out focus:outline-none group">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+
+            </div>
+        </form>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
+
+            @foreach (var item in Model)
+            {
+                <a asp-action="Details" asp-route-id="@item.Id"
+                   class="block p-6 bg-gray-900 rounded-xl border border-gray-800 shadow-xl shadow-blue-500/5 transition duration-300 ease-in-out hover:shadow-blue-500/30 hover:-translate-y-2">
+
+                    <div class="flex flex-col text-left space-y-4">
+
+                        <div>
+                            <p class="text-gray-400 text-sm flex items-center mb-1">
+                                <span class="mr-2 text-blue-400">🏷️</span> Nome da Viagem:
+                            </p>
+                            <h4 class="text-white text-xl font-bold">@item.NomeViagem</h4>
+                        </div>
+
+
+                        <div class="pt-2 border-t border-gray-800">
+                            <p class="text-gray-400 text-sm flex items-center mb-1">
+                                <span class="mr-2 text-green-400">🛫</span> Origem:
+                            </p>
+                            <h4 class="text-white text-md font-semibold">@item.AeroportoOrigem.NomeAeroporto</h4>
+                            <p class="text-gray-500 text-sm">@item.AeroportoOrigem.CidadeAeroporto</p>
+                            <h4 class="text-white text-md font-semibold">@item.DataPartida</h4>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-400 text-sm flex items-center mb-1">
+                                <span class="mr-2 text-red-400">🛬</span> Destino:
+                            </p>
+                            <h4 class="text-white text-md font-semibold">@item.AeroportoDestino.NomeAeroporto</h4>
+                            <p class="text-gray-500 text-sm">@item.AeroportoDestino.CidadeAeroporto</p>
+                            <h4 class="text-white text-md font-semibold">@item.DataChegada</h4>
+                        </div>
+
+                        <div class="pt-2 border-t border-gray-800">
+                            <p class="text-gray-400 text-sm flex items-center mb-1">
+                                <span class="mr-2 text-yellow-400">✈️</span> Aeronaves Envolvidas:
+                            </p>
+                            @if (item.Voos != null && item.Voos.Any())
+                            {
+                                <ul class="list-disc list-inside space-y-1 ml-4 mt-2">
+                                    @foreach (var voo in item.Voos)
+                                    {
+                                        <li>
+                                            <span class="font-medium text-blue-300">
+                                                @voo.Aeronave.Modelo
+                                            </span>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span class="text-gray-500 italic text-sm">Nenhum voo programado.</span>
+                            }
+                        </div>
+
+                        <div class="pt-2 border-t border-gray-800">
+                            <p class="text-gray-400 text-sm flex items-center mb-1">
+                                <span class="mr-2 text-yellow-400">💰</span> Preço Base:
+                            </p>
+                            @if (item.Voos != null && item.Voos.Any())
+                            {
+                                <ul class="list-disc list-inside space-y-1 ml-4 mt-2">
+                                    @foreach (var voo in item.Voos)
+                                    {
+                                        <li>
+                                            <span class="font-medium text-blue-300">
+                                                @voo.PrecoBase
+                                            </span>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span class="text-gray-500 italic text-sm">Nenhum preço base programado.</span>
+                            }
+                        </div>
+
+                    </div>
+                </a>
+            }
+
+            @if (!Model.Any())
+            {
+                <p class="col-span-full text-center text-gray-500 p-8 bg-gray-900/50 rounded-xl border border-gray-800">
+                    Nenhuma Viagem encontrada.
+                </p>
+            }
+        </div>
+
+    </div>
+</section>

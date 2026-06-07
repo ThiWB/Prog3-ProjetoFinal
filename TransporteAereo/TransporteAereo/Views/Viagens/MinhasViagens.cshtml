@@ -1,0 +1,68 @@
+﻿@model IEnumerable<TransporteAereo.Models.Compra>
+
+@{
+    ViewData["Title"] = "Minhas Viagens e Recibos";
+}
+
+<section class="py-10 bg-black text-white min-h-[60vh]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <a asp-area="Identity" asp-page="/Account/Manage/Index" class="inline-flex items-center justify-center text-white py-3 rounded-lg font-bold text-base uppercase tracking-wider shadow-md transition duration-300">
+            <i class="fas fa-arrow-left mr-2"></i> < Voltar
+        </a>
+
+        <h1 class="text-4xl font-extrabold mb-8 text-blue-400">
+            ✈️ Minhas Viagens e Recibos
+        </h1>
+
+        @if (Model.Any())
+        {
+            <div class="space-y-6">
+                @foreach (var compra in Model)
+                {
+                    <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 shadow-lg hover:shadow-blue-500/10 transition duration-300">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+
+                            <div class="md:col-span-2">
+                                <h2 class="text-2xl font-bold text-white mb-1">
+                                    @compra.Viagem.NomeViagem
+                                </h2>
+                                <p class="text-green-400 font-semibold mb-2">
+                                    @compra.Viagem.AeroportoOrigem.NomeAeroporto → @compra.Viagem.AeroportoDestino.NomeAeroporto
+                                </p>
+                                <p class="text-lg text-gray-300">
+                                    Compra em: @compra.DataCompra.ToString("dd/MM/yyyy HH:mm")
+                                </p>
+                                <p class="text-xl font-extrabold text-amber-400">
+                                    Total: @compra.PrecoTotal.ToString("C")
+                                </p>
+                            </div>
+
+                            <div class="flex flex-col space-y-2 md:space-y-0 md:flex-row md:justify-end md:space-x-4">
+
+                                <a asp-action="Recibo" asp-route-id="@compra.Id"
+                                   class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-center transition">
+                                    Ver Recibo (HTML)
+                                </a>
+
+                                <a asp-action="DownloadRecibo" asp-route-id="@compra.Id"
+                                   class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg text-center transition">
+                                    Baixar PDF
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-20 bg-gray-900 rounded-xl border border-gray-800">
+                <p class="text-xl text-gray-400">Você ainda não possui viagens concluídas.</p>
+                <a asp-action="Index" class="mt-6 inline-block px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg transition">
+                    Explorar Viagens Agora
+                </a>
+            </div>
+        }
+    </div>
+</section>

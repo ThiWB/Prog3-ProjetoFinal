@@ -1,0 +1,65 @@
+﻿@model TransporteAereo.ViewModels.Admin.ViagemCreateViewModel
+
+@{
+    ViewData["Title"] = "Editar Viagem";
+    Layout = "_Layout";
+}
+
+<section class="min-h-screen py-20 bg-black text-white">
+    <div class="max-w-3xl mx-auto px-6 sm:px-10 lg:px-12">
+
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-white border-b border-gray-800 pb-4">
+            Editar <span class="text-blue-400">Viagem</span>
+        </h1>
+
+        <div class="bg-gray-900/50 rounded-xl border border-gray-800 shadow-2xl shadow-blue-500/10 p-8">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="p-4 bg-red-900/30 border border-red-700 text-red-300 rounded-md mb-6"></div>
+
+                <div class="form-group mb-6">
+                    <label asp-for="NomeViagem" class="block text-sm font-medium text-gray-300 mb-2"></label>
+                    <input asp-for="NomeViagem" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300" />
+                    <span asp-validation-for="NomeViagem" class="text-sm text-red-400 mt-1 block"></span>
+                </div>
+
+                <h4 class="text-2xl font-bold text-blue-400 mb-4 border-b border-gray-700 pb-2">
+                    <i class="fas fa-plane-departure mr-2"></i> Seleção de Segmentos de Voo
+                </h4>
+
+                <div class="form-group mb-8">
+                    <label asp-for="IdsVoosSelecionados" class="block text-sm font-medium text-gray-300 mb-2">
+                        Voos Disponíveis (Selecione em Ordem)
+                    </label>
+
+                    <select asp-for="IdsVoosSelecionados"
+                                          asp-items="Model.VoosDisponiveis"
+                                          class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+                                          multiple="multiple"
+                                          size="12"
+                                          id="voosSelect">
+                    </select>
+
+                    <small class="form-text text-gray-500 mt-2 block">
+                        <i class="fas fa-info-circle mr-1"></i> Use **Ctrl/Cmd + clique** para selecionar múltiplos voos. A ordem de seleção define a sequência da viagem.
+                    </small>
+                    <span asp-validation-for="IdsVoosSelecionados" class="text-sm text-red-400 mt-1 block"></span>
+                </div>
+
+                <div class="flex justify-start space-x-4 mt-6">
+                    <button type="submit" class="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold text-base uppercase tracking-wider shadow-md transition duration-300">
+                        <i class="fas fa-save mr-2"></i> Salvar Alterações
+                    </button>
+                    <a asp-action="Index" class="inline-flex items-center justify-center bg-gray-600 hover:bg-gray-500 active:bg-gray-700 text-white px-6 py-3 rounded-lg font-bold text-base uppercase tracking-wider shadow-md transition duration-300">
+                        <i class="fas fa-arrow-left mr-2"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div> ****
+    </div>
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

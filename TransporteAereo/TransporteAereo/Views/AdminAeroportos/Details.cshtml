@@ -1,0 +1,49 @@
+﻿@model TransporteAereo.Models.Aeroporto
+
+@{
+    ViewData["Title"] = $"Detalhes - {Model.NomeAeroporto}";
+    Layout = "_Layout";
+}
+
+<section class="min-h-screen py-20 bg-black text-white">
+    <div class="max-w-4xl mx-auto px-6 sm:px-10 lg:px-12">
+
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-white border-b border-gray-800 pb-4">
+            Detalhes do <span class="text-blue-400">Aeroporto</span>
+        </h1>
+
+        <div class="bg-gray-900/50 rounded-xl border border-gray-800 shadow-2xl shadow-blue-500/10 p-8 mb-8">
+            <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                <div class="border-b border-gray-800 pb-3 sm:col-span-2">
+                    <dt class="text-sm font-medium text-gray-400">@Html.DisplayNameFor(model => model.NomeAeroporto)</dt>
+                    <dd class="mt-1 text-xl font-bold text-white">@Html.DisplayFor(model => model.NomeAeroporto)</dd>
+                </div>
+
+                <div class="border-b border-gray-800 pb-3">
+                    <dt class="text-sm font-medium text-gray-400">@Html.DisplayNameFor(model => model.CidadeAeroporto)</dt>
+                    <dd class="mt-1 text-lg text-white">@Html.DisplayFor(model => model.CidadeAeroporto)</dd>
+                </div>
+
+                <div class="border-b border-gray-800 pb-3">
+                    <dt class="text-sm font-medium text-gray-400">@Html.DisplayNameFor(model => model.EstadoAeroporto)</dt>
+                    <dd class="mt-1 text-lg text-white">@Html.DisplayFor(model => model.EstadoAeroporto)</dd>
+                </div>
+
+                <div class="border-b border-gray-800 pb-3 sm:col-span-2">
+                    <dt class="text-sm font-medium text-gray-400">@Html.DisplayNameFor(model => model.Pais)</dt>
+                    <dd class="mt-1 text-lg text-white">@Html.DisplayFor(model => model.Pais)</dd>
+                </div>
+            </dl>
+        </div>
+
+        <div class="mt-8">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="text-blue-400 hover:text-blue-300 mr-4 font-semibold transition duration-300">
+                <i class="fas fa-edit mr-1"></i> Editar
+            </a>
+            <a asp-action="Index" class="text-gray-400 hover:text-white font-semibold transition duration-300">
+                <i class="fas fa-arrow-left mr-1"></i> Voltar para a Lista
+            </a>
+        </div>
+
+    </div>
+</section>

@@ -1,0 +1,248 @@
+﻿@page
+@model RegisterModel
+
+@{
+    ViewData["Title"] = "Registrar";
+}
+
+<section class="min-h-screen py-20 bg-black text-white">
+    <div class="max-w-md mx-auto px-6 sm:px-10 lg:px-12">
+        <h1 class="text-4xl font-extrabold mb-2 text-white">
+            Criar uma <span class="text-blue-400">Conta</span>
+        </h1>
+        <p class="text-gray-400 mb-10 border-b border-gray-800 pb-4">
+            Preencha os dados abaixo para registrar-se.
+        </p>
+
+        <div class="bg-gray-900/70 p-8 rounded-xl border border-gray-800 shadow-xl shadow-blue-500/10">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="space-y-6">
+                <div asp-validation-summary="ModelOnly" class="p-4 bg-red-900/30 border border-red-700 text-red-300 rounded-md"></div>
+
+
+                <div class="form-group">
+                    <label asp-for="Input.Nome" class="block text-sm font-medium text-gray-300 mb-2">Nome</label>
+                    <input asp-for="Input.Nome" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300" placeholder="Informe seu Nome" />
+                    <span asp-validation-for="Input.Nome" class="text-sm text-red-400 mt-1 block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Sobrenome" class="block text-sm font-medium text-gray-300 mb-2">Sobrenome</label>
+                    <input asp-for="Input.Sobrenome" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300" placeholder="Informe seu Sobrenome" />
+                    <span asp-validation-for="Input.Sobrenome" class="text-sm text-red-400 mt-1 block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.CPF" class="block text-sm font-medium text-gray-300 mb-2">CPF</label>
+                    <input asp-for="Input.CPF" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300" placeholder="Informe seu CPF" />
+                    <span asp-validation-for="Input.CPF" class="text-sm text-red-400 mt-1 block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Idade" class="block text-sm font-medium text-gray-300 mb-2">Idade</label>
+                    <input asp-for="Input.Idade" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300" placeholder="Informe sua Idade" />
+                    <span asp-validation-for="Input.Idade" class="text-sm text-red-400 mt-1 block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Genero" class="block text-sm font-medium text-gray-300 mb-2">Gênero</label>
+                    <select asp-for="Input.Genero"
+                            asp-items="Model.Generos"
+                            class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300">
+                        <option value="">-- Selecione o seu Gênero --</option>
+                    </select>
+                    <span asp-validation-for="Input.Genero" class="text-sm text-red-400 mt-1 block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Tipo" class="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
+                    <select asp-for="Input.Tipo"
+                            asp-items="Model.Tipos"
+                            class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300">
+                        <option value="">-- Selecione a sua Classificação --</option>
+                    </select>
+                    <span asp-validation-for="Input.Tipo" class="text-sm text-red-400 mt-1 block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.CodigoCEP" class="block text-sm font-medium text-gray-300 mb-2">CEP</label>
+
+                    <input asp-for="Input.CodigoCEP"
+                           id="cepInput"
+                           class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+                           maxlength="8"
+                           placeholder="Ex: 89665000" />
+
+                    <span asp-validation-for="Input.CodigoCEP" class="text-sm text-red-400 mt-1 block"></span>
+
+                    <button type="button" id="consultarBtn" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow-md transition duration-300 mt-3">
+                        Consultar CEP
+                    </button>
+
+                    <div id="loading" class="spinner-border text-info ml-3" role="status" style="display:none;">
+                        <span class="sr-only">Carregando...</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Logradouro" class="block text-sm font-medium text-gray-300 mb-2">Logradouro</label>
+                    <input asp-for="Input.Logradouro"
+                           id="inputLogradouro"
+                           class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+                           placeholder="Rua / Avenida"
+                           readonly />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Numero" class="block text-sm font-medium text-gray-300 mb-2">Número</label>
+                    <input asp-for="Input.Numero"
+                           class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+                           placeholder="Número" />
+                    <span asp-validation-for="Input.Numero" class="text-sm text-red-400 mt-1 block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Bairro" class="block text-sm font-medium text-gray-300 mb-2">Bairro</label>
+                    <input asp-for="Input.Bairro"
+                           id="inputBairro"
+                           class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+                           placeholder="Bairro"
+                           readonly />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Cidade" class="block text-sm font-medium text-gray-300 mb-2">Cidade</label>
+                    <input asp-for="Input.Cidade"
+                           id="inputCidade"
+                           class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+                           placeholder="Cidade"
+                           readonly />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Estado" class="block text-sm font-medium text-gray-300 mb-2">Estado</label>
+                    <input asp-for="Input.Estado"
+                           id="inputEstado"
+                           class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+                           placeholder="UF"
+                           readonly />
+                </div>
+
+                <span id="cepError" class="text-sm text-green-400 mt-1 block"></span>
+
+                <div class="form-group">
+                    <label asp-for="Input.Email" class="block text-sm font-medium text-gray-300 mb-2">E-mail</label>
+                    <input asp-for="Input.Email" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300" placeholder="nome@dominio.com" />
+                    <span asp-validation-for="Input.Email" class="text-sm text-red-400 mt-1 block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Password" class="block text-sm font-medium text-gray-300 mb-2">Senha</label>
+                    <input asp-for="Input.Password" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300" placeholder="Senha" />
+                    <span asp-validation-for="Input.Password" class="text-sm text-red-400 mt-1 block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.ConfirmPassword" class="block text-sm font-medium text-gray-300 mb-2">Confirmar Senha</label>
+                    <input asp-for="Input.ConfirmPassword" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300" placeholder="Confirmar Senha" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-sm text-red-400 mt-1 block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.IsAdmin" class="form-check-label block text-sm font-medium text-gray-300 mb-2">Administrador?</label>
+                    <input asp-for="Input.IsAdmin" class=" bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300" placeholder="Administrador?" />
+                    <span asp-validation-for="Input.IsAdmin" class="text-sm text-red-400 mt-1 block"></span>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-bold text-lg shadow-lg shadow-blue-500/30 transition duration-300 transform hover:scale-[1.02]">
+                    Registrar
+                </button>
+
+                <div class="mt-4 text-center">
+                    <a asp-page="./Login" class="text-blue-400 hover:text-blue-300 font-semibold transition duration-300">
+                        Já possui conta? Faça login
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Função para limpar os campos de endereço
+        function clearAddressFields() {
+            document.getElementById('inputLogradouro').value = '';
+            document.getElementById('inputBairro').value = '';
+            document.getElementById('inputCidade').value = '';
+            document.getElementById('inputEstado').value = '';
+        }
+
+        document.getElementById('consultarBtn').addEventListener('click', async (e) => {
+            const cepInput = document.getElementById('cepInput');
+            const cep = cepInput.value.replace(/\D/g, ''); // Remove não-dígitos
+            const errorSpan = document.getElementById('cepError');
+            const loadingSpinner = document.getElementById('loading');
+
+            // Limpa a mensagem e remove ambas as classes de cor no início
+            errorSpan.textContent = '';
+            errorSpan.classList.remove('text-red-400', 'text-green-400');
+            clearAddressFields();
+
+            if (cep.length !== 8) {
+                errorSpan.textContent = 'CEP inválido. Digite 8 dígitos.';
+                errorSpan.classList.add('text-red-400'); // Aplica cor de erro aqui
+                return;
+            }
+
+            loadingSpinner.style.display = 'inline-block';
+
+            try {
+                // Chama a API Controller
+                const response = await fetch(`/api/ConsultaCEP?Codigo=${cep}`);
+
+                if (response.ok) {
+                    const cepData = await response.json();
+
+                    if (cepData.erro) {
+                        // Erro: CEP não encontrado pela API externa
+                        errorSpan.textContent = 'CEP não encontrado ou inexistente.';
+                        errorSpan.classList.add('text-red-400');
+                    } else {
+                        // SUCESSO!
+                        document.getElementById('inputLogradouro').value = cepData.logradouro || '';
+                        document.getElementById('inputBairro').value = cepData.bairro || '';
+                        document.getElementById('inputCidade').value = cepData.cidade || '';
+                        document.getElementById('inputEstado').value = cepData.estado || '';
+
+                        errorSpan.textContent = 'Endereço encontrado e campos preenchidos!';
+                        errorSpan.classList.add('text-green-400'); // Aplica cor de sucesso (verde)
+
+                        document.getElementById('Input_Numero').focus();
+                    }
+
+                } else if (response.status === 404) {
+                    // Erro: Rota ou recurso não encontrado (pode ocorrer se o seu Controller falhar)
+                    errorSpan.textContent = 'CEP não encontrado ou inexistente.';
+                    errorSpan.classList.add('text-red-400');
+                } else {
+                    // Outros erros HTTP (400, 500, etc.)
+                    const errorJson = await response.json();
+                    const errorMessage = errorJson.errorMessages ? errorJson.errorMessages.join('<br>') : `Ocorreu um erro desconhecido (Status ${response.status}).`;
+                    errorSpan.innerHTML = `Erro na Consulta: ${errorMessage}`;
+                    errorSpan.classList.add('text-red-400');
+                }
+
+            } catch (error) {
+                // Erro de rede ou erro na execução do código
+                errorSpan.textContent = `Falha de rede. Verifique sua conexão.`;
+                errorSpan.classList.add('text-red-400');
+            } finally {
+                // Oculta o spinner SEM mexer nas classes de cor
+                loadingSpinner.style.display = 'none';
+            }
+        });
+    </script>
+}
+

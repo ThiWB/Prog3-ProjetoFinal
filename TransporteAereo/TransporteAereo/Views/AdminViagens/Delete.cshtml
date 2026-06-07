@@ -1,0 +1,78 @@
+﻿@model TransporteAereo.Models.Viagem
+
+@{
+    ViewData["Title"] = "Excluir Viagem";
+    Layout = "_Layout";
+
+    var voosCount = Model.Voos?.Count() ?? 0;
+}
+
+<section class="min-h-screen py-20 bg-black text-white">
+    <div class="max-w-xl mx-auto px-6 sm:px-10 lg:px-12">
+
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-red-500 border-b border-gray-800 pb-4">
+            <i class="fas fa-exclamation-triangle mr-2"></i> Excluir Viagem
+        </h1>
+        <p class="text-lg text-gray-400 mb-8">
+            Você está prestes a **excluir** a viagem **@Model.NomeViagem**. Esta ação **não pode ser desfeita**.
+        </p>
+
+        @if (voosCount > 0)
+        {
+            <div class="bg-yellow-900/30 rounded-xl border border-yellow-800 shadow-2xl shadow-yellow-500/10 p-5 mb-8 text-yellow-300">
+                <p class="font-bold mb-2">Atenção à Desassociação:</p>
+                <p class="text-sm">
+                    Esta Viagem é composta por **@voosCount voo(s)**. Ao excluir, esses voos serão **desvinculados** da viagem, tornando-se voos independentes e **disponíveis** para serem incluídos em novas viagens. Os voos e seus dados **não serão excluídos**.
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="bg-red-900/30 rounded-xl border border-red-800 shadow-2xl shadow-red-500/10 p-5 mb-8">
+                <p class="font-bold text-lg text-red-400">Esta viagem não possui voos associados.</p>
+            </div>
+        }
+
+
+        <div class="bg-gray-900/50 rounded-xl border border-gray-800 shadow-2xl shadow-blue-500/10 p-8 mb-8">
+            <dl class="grid grid-cols-1 gap-x-6 gap-y-4">
+
+                <div class="pb-3">
+                    <dt class="text-sm font-medium text-gray-400">NOME DA VIAGEM</dt>
+                    <dd class="mt-1 text-xl font-bold text-white">@Model.NomeViagem</dd>
+                </div>
+
+                <div class="pb-3">
+                    <dt class="text-sm font-medium text-gray-400">ROTA COMPLETA</dt>
+                    <dd class="mt-1 text-lg text-white">
+                        @Model.AeroportoOrigem.CidadeAeroporto
+                        <i class="fas fa-long-arrow-alt-right text-blue-400 mx-1"></i>
+                        @Model.AeroportoDestino.CidadeAeroporto
+                    </dd>
+                </div>
+
+                <div class="pb-3">
+                    <dt class="text-sm font-medium text-gray-400">DATA DE PARTIDA</dt>
+                    <dd class="mt-1 text-lg text-white">@Model.DataPartida.ToString("dd/MM/yyyy HH:mm")</dd>
+                </div>
+
+                <div class="pb-3">
+                    <dt class="text-sm font-medium text-gray-400">PREÇO TOTAL</dt>
+                    <dd class="mt-1 text-xl font-bold text-green-400">@Model.PrecoTotal.ToString("C2")</dd>
+                </div>
+            </dl>
+        </div>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <div class="flex justify-start space-x-4">
+                <button type="submit" class="inline-flex items-center justify-center bg-red-600 hover:bg-red-500 active:bg-red-700 text-white px-6 py-3 rounded-lg font-bold text-base uppercase tracking-wider shadow-md shadow-red-500/30 transition duration-300 transform hover:scale-[1.02]">
+                    <i class="fas fa-trash-alt mr-2"></i> Confirmar Exclusão da Viagem
+                </button>
+                <a asp-action="Index" class="inline-flex items-center justify-center bg-gray-600 hover:bg-gray-500 active:bg-gray-700 text-white px-6 py-3 rounded-lg font-bold text-base uppercase tracking-wider shadow-md transition duration-300">
+                    <i class="fas fa-arrow-left mr-2"></i> Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</section>

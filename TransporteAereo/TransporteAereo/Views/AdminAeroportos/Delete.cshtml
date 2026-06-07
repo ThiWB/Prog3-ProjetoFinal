@@ -1,0 +1,47 @@
+﻿@model TransporteAereo.Models.Aeroporto
+
+@{
+    ViewData["Title"] = $"Deletar - {Model.NomeAeroporto}";
+    Layout = "_Layout";
+}
+
+<section class="min-h-screen py-20 bg-black text-white">
+    <div class="max-w-xl mx-auto px-6 sm:px-10 lg:px-12">
+
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-red-500 border-b border-gray-800 pb-4">
+            Excluir Aeroporto
+        </h1>
+        <p class="text-lg text-gray-400 mb-8">
+            Tem certeza que deseja **excluir** o aeroporto **@Model.NomeAeroporto**? Esta ação **não pode ser desfeita**.
+        </p>
+
+        <div class="bg-red-900/30 rounded-xl border border-red-800 shadow-2xl shadow-red-500/10 p-8 mb-8">
+            <dl class="grid grid-cols-1 gap-x-6 gap-y-4">
+                <div class="pb-3">
+                    <dt class="text-sm font-medium text-gray-400">@Html.DisplayNameFor(model => model.NomeAeroporto)</dt>
+                    <dd class="mt-1 text-lg text-white">@Html.DisplayFor(model => model.NomeAeroporto)</dd>
+                </div>
+                <div class="pb-3">
+                    <dt class="text-sm font-medium text-gray-400">@Html.DisplayNameFor(model => model.CidadeAeroporto)</dt>
+                    <dd class="mt-1 text-lg text-white">@Html.DisplayFor(model => model.CidadeAeroporto)</dd>
+                </div>
+                <div class="pb-3">
+                    <dt class="text-sm font-medium text-gray-400">Localização Completa</dt>
+                    <dd class="mt-1 text-lg text-white">@Model.CidadeAeroporto - @Model.EstadoAeroporto, @Model.Pais</dd>
+                </div>
+            </dl>
+        </div>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <div class="flex justify-start space-x-4">
+                <button type="submit" class="inline-flex items-center justify-center bg-red-600 hover:bg-red-500 active:bg-red-700 text-white px-6 py-3 rounded-lg font-bold text-base uppercase tracking-wider shadow-md transition duration-300">
+                    <i class="fas fa-trash-alt mr-2"></i> Confirmar Exclusão
+                </button>
+                <a asp-action="Index" class="inline-flex items-center justify-center bg-gray-600 hover:bg-gray-500 active:bg-gray-700 text-white px-6 py-3 rounded-lg font-bold text-base uppercase tracking-wider shadow-md transition duration-300">
+                    <i class="fas fa-arrow-left mr-2"></i> Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</section>

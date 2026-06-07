@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Transportes dos Guri | Viagens Premium";
+}
+
+<section class="relative bg-black min-h-screen flex items-center overflow-hidden">
+    <div class="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-40 md:py-0 flex items-center z-10 w-full">
+        <div class="text-center md:text-left w-full">
+            <h1 class="text-8xl md:text-8xl font-extrabold text-white mb-6 leading-none tracking-tighter animate-fade-in-down">
+                Painel Restrito de <span class="text-blue-400">Administrador</span>
+            </h1>
+
+            <p class="text-xl md:text-3xl text-gray-300 mb-12 max-w-5xl mx-auto md:mx-0 font-light tracking-wide animate-fade-in-up">
+                Página Inicial para o gerenciamento de toda estrutura da <b class="font-bold">Transportes dos Guri</b>. Tecnologia de ponta para uma gestão otimizada.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-6 justify-center md:justify-start animate-fade-in">
+                <a asp-controller="AdminAeronaves" asp-action="Index"
+                   class="inline-flex items-center justify-center
+                          bg-blue-600 hover:bg-blue-500 active:bg-blue-700
+                          text-white px-10 py-4 rounded-lg font-bold text-xl uppercase tracking-wider
+                          shadow-2xl shadow-blue-500/50 transition duration-400 ease-in-out transform hover:scale-105 hover:shadow-blue-400/70
+                          ring-2 ring-blue-600 ring-offset-2 ring-offset-black w-full sm:w-auto">
+                    <i class="fas fa-search-dollar mr-3 text-2xl"></i> Gerenciamento de Aeronaves
+                </a>
+                <a asp-controller="AdminAeroportos" asp-action="Index"
+                   class="inline-flex items-center justify-center
+                          bg-blue-600 hover:bg-blue-500 active:bg-blue-700
+                          text-white px-10 py-4 rounded-lg font-bold text-xl uppercase tracking-wider
+                          shadow-2xl shadow-blue-500/50 transition duration-400 ease-in-out transform hover:scale-105 hover:shadow-blue-400/70
+                          ring-2 ring-blue-600 ring-offset-2 ring-offset-black w-full sm:w-auto">
+                    <i class="fas fa-search-dollar mr-3 text-2xl"></i> Gerenciamento de Aeroportos
+                </a>
+                <a asp-controller="AdminVoos" asp-action="Index"
+                   class="inline-flex items-center justify-center
+                          bg-blue-600 hover:bg-blue-500 active:bg-blue-700
+                          text-white px-10 py-4 rounded-lg font-bold text-xl uppercase tracking-wider
+                          shadow-2xl shadow-blue-500/50 transition duration-400 ease-in-out transform hover:scale-105 hover:shadow-blue-400/70
+                          ring-2 ring-blue-600 ring-offset-2 ring-offset-black w-full sm:w-auto">
+                    <i class="fas fa-search-dollar mr-3 text-2xl"></i> Gerenciamento de Voos
+                </a>
+                <a asp-controller="AdminViagens" asp-action="Index"
+                   class="inline-flex items-center justify-center
+                          bg-blue-600 hover:bg-blue-500 active:bg-blue-700
+                          text-white px-10 py-4 rounded-lg font-bold text-xl uppercase tracking-wider
+                          shadow-2xl shadow-blue-500/50 transition duration-400 ease-in-out transform hover:scale-105 hover:shadow-blue-400/70
+                          ring-2 ring-blue-600 ring-offset-2 ring-offset-black w-full sm:w-auto">
+                    <i class="fas fa-search-dollar mr-3 text-2xl"></i> Gerenciamento de Viagens
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+

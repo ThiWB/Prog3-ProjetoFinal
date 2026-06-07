@@ -1,0 +1,249 @@
+﻿@model TransporteAereo.ViewModels.Admin.AeronaveCompletaCreateViewModel
+
+@{
+    ViewData["Title"] = "Nova Aeronave | Transportes dos Guri";
+    Layout = "_Layout";
+}
+
+<section class="min-h-screen py-20 bg-black text-white">
+    <div class="max-w-7xl mx-auto px-6 sm:px-10 lg:px-12">
+
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-white">
+            Adicionar Nova <span class="text-blue-400">Aeronave</span>
+        </h1>
+        <p class="text-lg text-gray-400 mb-10 border-b border-gray-800 pb-4">
+            Preencha os dados da aeronave e configure seus assentos iniciais.
+        </p>
+
+        <div class="flex justify-center">
+            <div class="w-full p-4">
+
+                <div class="bg-gray-900/70 p-8 rounded-xl border border-gray-800 shadow-xl shadow-blue-500/10">
+
+                    <h4 class="text-2xl font-bold text-white mb-6">Dados Principais da Aeronave</h4>
+
+                    <form asp-action="Create" class="space-y-6" id="aeronaveForm">
+                        <div asp-validation-summary="ModelOnly" class="p-4 bg-red-900/30 border border-red-700 text-red-300 rounded-md"></div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="form-group">
+                                <label asp-for="Modelo" class="block text-sm font-medium text-gray-300 mb-2"></label>
+                                <input asp-for="Modelo" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300" placeholder="Ex: Boeing 737 ou Embraer 190" />
+                                <span asp-validation-for="Modelo" class="text-sm text-red-400 mt-1 block"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Tipo" class="block text-sm font-medium text-gray-300 mb-2"></label>
+                                <select asp-for="Tipo" asp-items="Html.GetEnumSelectList<TransporteAereo.Models.TipoAeronave>()" class="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 px-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300">
+                                    <option value="">-- Selecione o Tipo --</option>
+                                </select>
+                                <span asp-validation-for="Tipo" class="text-sm text-red-400 mt-1 block"></span>
+                            </div>
+                        </div>
+
+                        <div class="pt-8">
+                            <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                                <h4 class="text-2xl font-bold text-blue-400">Assentos e Configuração</h4>
+                                <button type="button" id="addAssentoBtn" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition duration-300">
+                                    <i class="fas fa-plus mr-1"></i> Adicionar Assento
+                                </button>
+                            </div>
+
+                            <div id="assentosContainer" class="space-y-4">
+                                @{
+                                    for (int i = 0; i < Model.Assentos.Count; i++)
+                                    {
+                                        <partial name="_AssentoFormGroupPartial" model="Model.Assentos[i]" view-data='new ViewDataDictionary(ViewData) { { "index", i } }' />
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                        <div class="form-group pt-6 flex gap-4">
+                            <input type="submit" value="Salvar Aeronave e Assentos"
+                                   class="inline-flex items-center justify-center
+                                             bg-blue-600 hover:bg-blue-500 active:bg-blue-700
+                                             text-white px-6 py-3 rounded-lg font-bold text-lg uppercase tracking-wider
+                                             shadow-lg shadow-blue-500/30 transition duration-300 ease-in-out transform hover:scale-[1.02]
+                                             ring-2 ring-blue-600 ring-offset-2 ring-offset-gray-900 cursor-pointer flex-grow" />
+
+                            <a asp-action="Index" class="flex-shrink-0 self-center text-red-400 hover:text-red-300 font-semibold transition duration-300">
+                                Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 text-center">
+            <a asp-action="Index" class="text-blue-400 hover:text-blue-300 font-semibold transition duration-300">
+                <i class="fas fa-arrow-left mr-2"></i> Voltar para a Lista
+            </a>
+        </div>
+    </div>
+</section>
+
+<template id="assento-template">
+    <div class="assento-item bg-gray-800 p-4 rounded-lg border border-gray-700">
+        <div class="flex justify-end mb-3">
+            <button type="button" class="remove-assento-btn text-red-400 hover:text-red-300 font-semibold text-sm transition duration-300">
+                Remover
+            </button>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-gray-400 mb-2">Número</label>
+                <input type="text" name="Assentos[#INDEX#].NumeroAssento"
+                       class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-3 px-4 focus:ring-blue-500"
+                       placeholder="Ex: 05A"
+                       data-val="true"
+                       data-val-required="O número do assento é obrigatório."
+                       data-val-length-max="5"
+                       data-val-length="O número do assento não pode ter mais de 5 caracteres." />
+                <span class="text-sm text-red-400 mt-1 block field-validation-valid"
+                      data-valmsg-for="Assentos[#INDEX#].NumeroAssento"
+                      data-valmsg-replace="true"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-gray-400 mb-2">Classe</label>
+                <select name="Assentos[#INDEX#].Classe"
+                        class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-3 px-4 focus:ring-blue-500"
+                        data-val="true" data-val-required="A classe é obrigatória.">
+                    @Html.Raw(Html.GetEnumSelectList<TransporteAereo.Models.ClasseAssento>()
+                                        .Aggregate("", (c, n) => c + $"<option value='{n.Value}'>{n.Text}</option>"))
+                </select>
+                <span class="text-sm text-red-400 mt-1 block field-validation-valid"
+                      data-valmsg-for="Assentos[#INDEX#].Classe"
+                      data-valmsg-replace="true"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-gray-400 mb-2">Localização</label>
+                <select name="Assentos[#INDEX#].Localizacao"
+                        class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-3 px-4 focus:ring-blue-500"
+                        data-val="true" data-val-required="A localização é obrigatória.">
+                    @Html.Raw(Html.GetEnumSelectList<TransporteAereo.Models.LocalizacaoPoltrona>()
+                                        .Aggregate("", (c, n) => c + $"<option value='{n.Value}'>{n.Text}</option>"))
+                </select>
+                <span class="text-sm text-red-400 mt-1 block field-validation-valid"
+                      data-valmsg-for="Assentos[#INDEX#].Localizacao"
+                      data-valmsg-replace="true"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-gray-400 mb-2">Lado</label>
+                <select name="Assentos[#INDEX#].Lado"
+                        class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg py-3 px-4 focus:ring-blue-500"
+                        data-val="true" data-val-required="O lado é obrigatório.">
+                    @Html.Raw(Html.GetEnumSelectList<TransporteAereo.Models.LadoPoltrona>()
+                                        .Aggregate("", (c, n) => c + $"<option value='{n.Value}'>{n.Text}</option>"))
+                </select>
+                <span class="text-sm text-red-400 mt-1 block field-validation-valid"
+                      data-valmsg-for="Assentos[#INDEX#].Lado"
+                      data-valmsg-replace="true"></span>
+            </div>
+        </div>
+    </div>
+</template>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        $(document).ready(function () {
+            let assentoIndex = @(Model.Assentos?.Count ?? 0);
+            const container = $('#assentosContainer');
+            const templateHtml = $('#assento-template').html();
+            const form = $('#aeronaveForm');
+
+
+            function rebindValidation() {
+                form.removeData('validator').removeData('unobtrusiveValidation');
+                $('.field-validation-error').removeClass('field-validation-error').addClass('field-validation-valid').empty();
+                $('span[data-valmsg-for]').removeClass('field-validation-error').addClass('field-validation-valid').empty();
+                $.validator.unobtrusive.parse(form);
+            }
+
+            function addAssento() {
+                const html = templateHtml.replace(/#INDEX#/g, assentoIndex);
+                container.append(html);
+                assentoIndex++;
+                rebindValidation();
+            }
+
+            function reindexAssentos() {
+                const items = container.find('.assento-item');
+                let newIndex = 0;
+                items.each(function() {
+                    const item = $(this);
+                    const indexPlaceholder = `[${newIndex}]`;
+                    const fieldsAndSpans = item.find('input, select, textarea, span[data-valmsg-for]');
+
+                    fieldsAndSpans.each(function() {
+                        const element = $(this);
+                        const isInput = element.is('input, select, textarea');
+
+                        if (isInput) {
+                            const currentName = element.attr('name');
+                            if (currentName) {
+                                const newName = currentName.replace(/\[\d+\]/, indexPlaceholder);
+                                element.attr('name', newName);
+
+                                const currentId = element.attr('id');
+                                if (currentId) {
+                                    const newId = currentId.replace(/_\d+__/, `_${newIndex}__`);
+                                    element.attr('id', newId);
+                                }
+
+                                $.each(element.data(), function(key, value) {
+                                    if (key.startsWith('val')) {
+                                        element.removeAttr('data-' + key.replace(/([A-Z])/g, '-$1').toLowerCase());
+                                    }
+                                });
+                            }
+                        } else {
+                            const currentValMsgFor = element.attr('data-valmsg-for');
+                            if (currentValMsgFor) {
+                                const newValMsgFor = currentValMsgFor.replace(/\[\d+\]/, indexPlaceholder);
+                                element.attr('data-valmsg-for', newValMsgFor);
+                            }
+                        }
+                    });
+                    newIndex++;
+                });
+
+                assentoIndex = newIndex;
+                rebindValidation();
+            }
+
+            if (assentoIndex > 0) {
+                reindexAssentos();
+            }
+
+            if (assentoIndex === 0) {
+                 addAssento();
+            }
+
+
+            $('#addAssentoBtn').on('click', function (e) {
+                e.preventDefault();
+                addAssento();
+            });
+
+            container.on('click', '.remove-assento-btn', function (e) {
+                e.preventDefault();
+
+                if (container.find('.assento-item').length <= 1) {
+                    alert('É necessário ter pelo menos um assento configurado para a aeronave.');
+                    return;
+                }
+
+                $(this).closest('.assento-item').remove();
+                reindexAssentos();
+            });
+        });
+    </script>
+}

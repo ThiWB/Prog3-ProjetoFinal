@@ -1,0 +1,111 @@
+﻿@model TransporteAereo.Models.Viagem
+
+@{
+    ViewData["Title"] = $"Viagem Detalhes | {Model.AeroportoOrigem.CidadeAeroporto} - {Model.AeroportoDestino.CidadeAeroporto}";
+    Layout = "_Layout";
+
+    var duracaoViagem = Model.DataChegada - Model.DataPartida;
+    var duracaoFormatada = $"{(int)duracaoViagem.TotalDays}d {(int)duracaoViagem.TotalHours % 24}h {duracaoViagem.Minutes}m";
+}
+
+<section class="min-h-screen py-20 bg-black text-white">
+    <div class="max-w-4xl mx-auto px-6 sm:px-10 lg:px-12">
+
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-white border-b border-gray-800 pb-4">
+            Detalhes da <span class="text-blue-400">Viagem</span>
+        </h1>
+        <h2 class="text-2xl text-gray-400 mb-8">
+            <i class="fas fa-route mr-1"></i> @Model.NomeViagem
+        </h2>
+
+        <div class="bg-gray-900/50 rounded-xl border border-gray-800 shadow-2xl shadow-blue-500/10 p-8 mb-8">
+            <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+
+                <div class="border-b border-gray-800 pb-3 sm:col-span-2">
+                    <dt class="text-sm font-medium text-gray-400">Rota Principal</dt>
+                    <dd class="mt-1 text-lg text-white">
+                        @Model.AeroportoOrigem.CidadeAeroporto (@Model.AeroportoOrigem.EstadoAeroporto)
+                        <i class="fas fa-long-arrow-alt-right mx-2 text-blue-400"></i>
+                        @Model.AeroportoDestino.CidadeAeroporto (@Model.AeroportoDestino.EstadoAeroporto)
+                    </dd>
+                </div>
+
+                <div class="border-b border-gray-800 pb-3">
+                    <dt class="text-sm font-medium text-gray-400">Partida (Primeiro Voo)</dt>
+                    <dd class="mt-1 text-lg text-white">@Model.DataPartida.ToString("dd/MM/yyyy HH:mm")</dd>
+                    <dd class="text-xs text-gray-500">(@Model.AeroportoOrigem.NomeAeroporto)</dd>
+                </div>
+
+                <div class="border-b border-gray-800 pb-3">
+                    <dt class="text-sm font-medium text-gray-400">Chegada (Último Voo)</dt>
+                    <dd class="mt-1 text-lg text-white">@Model.DataChegada.ToString("dd/MM/yyyy HH:mm")</dd>
+                    <dd class="text-xs text-gray-500">(@Model.AeroportoDestino.NomeAeroporto)</dd>
+                </div>
+
+                <div class="border-b border-gray-800 pb-3">
+                    <dt class="text-sm font-medium text-gray-400">Duração Total da Viagem</dt>
+                    <dd class="mt-1 text-lg text-white">@duracaoFormatada</dd>
+                </div>
+
+                <div class="border-b border-gray-800 pb-3">
+                    <dt class="text-sm font-medium text-gray-400">Preço Total</dt>
+                    <dd class="mt-1 text-xl font-bold text-green-400">@Model.PrecoTotal.ToString("C2")</dd>
+                </div>
+            </dl>
+        </div>
+
+        @{
+            var voosOrdenados = Model.Voos?.OrderBy(v => v.HorarioSaida).ToList() ?? new List<Voo>();
+        }
+
+        <h3 class="text-2xl font-bold mb-4 text-white border-b border-gray-800 pb-2">Segmentos de Voo (@voosOrdenados.Count)</h3>
+
+        @if (voosOrdenados.Any())
+        {
+            <div class="overflow-x-auto bg-gray-900/50 rounded-xl border border-gray-800 shadow-2xl shadow-blue-500/10 mb-8">
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead class="bg-gray-800/70">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">#</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Rota (Voo)</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Partida / Chegada</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider text-right">Preço Base</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-800">
+                        @for (int i = 0; i < voosOrdenados.Count; i++)
+                        {
+                            var voo = voosOrdenados[i];
+                            <tr class="hover:bg-gray-800 transition duration-300">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-blue-400">@(i + 1)</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                                    <span class="block">@voo.AeroportoOrigem.CidadeAeroporto → @voo.AeroportoDestino.CidadeAeroporto</span>
+                                    <span class="block text-xs text-gray-500">Aeronave: @voo.Aeronave.Modelo</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                    <span class="block">Saída: @voo.HorarioSaida.ToString("dd/MM HH:mm")</span>
+                                    <span class="block">Chegada: @voo.HorarioChegada.ToString("dd/MM HH:mm")</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-right text-green-400">@voo.PrecoBase.ToString("C2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-gray-400 p-4 bg-gray-900/50 rounded-lg border border-gray-800 mb-8">Nenhum voo associado a esta viagem.</p>
+        }
+
+        <div class="mt-8">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="text-blue-400 hover:text-blue-300 mr-4 font-semibold transition duration-300">
+                <i class="fas fa-edit mr-1"></i> Editar Viagem
+            </a>
+            <a asp-action="Index" class="text-gray-400 hover:text-white font-semibold transition duration-300">
+                <i class="fas fa-arrow-left mr-1"></i> Voltar para a Lista
+            </a>
+        </div>
+
+    </div>
+</section>

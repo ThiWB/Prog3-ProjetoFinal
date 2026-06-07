@@ -1,0 +1,26 @@
+﻿@using TransporteAereo.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+<nav class="space-y-2">
+    <a class="block px-4 py-2 rounded-lg font-medium transition duration-300 hover:bg-blue-600/20 hover:text-blue-400 @ManageNavPages.IndexNavClass(ViewContext)"
+       asp-page="./Index">Perfil</a>
+
+    <a class="block px-4 py-2 rounded-lg font-medium transition duration-300 hover:bg-blue-600/20 hover:text-blue-400 @ManageNavPages.ChangePasswordNavClass(ViewContext)"
+       asp-page="./ChangePassword">Senha</a>
+
+    <a class="block px-4 py-2 rounded-lg font-medium transition duration-300 hover:bg-blue-600/20 hover:text-blue-400"
+       asp-controller="Viagens"
+       asp-action="MinhasViagens">Recibos/Passagens</a>
+
+    @if (hasExternalLogins)
+    {
+        <a class="block px-4 py-2 rounded-lg font-medium transition duration-300 hover:bg-blue-600/20 hover:text-blue-400 @ManageNavPages.ExternalLoginsNavClass(ViewContext)"
+           asp-page="./ExternalLogins">Logins Externos</a>
+    }
+
+    <a class="block px-4 py-2 rounded-lg font-medium transition duration-300 hover:bg-blue-600/20 hover:text-blue-400 @ManageNavPages.PersonalDataNavClass(ViewContext)"
+       asp-page="./PersonalData">Dados Pessoais</a>
+</nav>
